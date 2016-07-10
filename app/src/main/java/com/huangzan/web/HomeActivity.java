@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.webkit.WebSettings;
@@ -17,9 +20,13 @@ import android.widget.Toast;
 
 
 public class HomeActivity extends AppCompatActivity {
+        private CoordinatorLayout mainContent;
+    private AppBarLayout appbar;
+    private Toolbar toolBar;
     private WebView webview;
     private WebSettings webSettings;
     private WebViewClient client;
+
     private static boolean isExit = false;
     private static Handler handler = new Handler() {
         @Override
@@ -33,6 +40,10 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        mainContent = (CoordinatorLayout) findViewById(R.id.main_content);
+        appbar = (AppBarLayout) findViewById(R.id.appbar);
+        toolBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolBar);
         webview = (WebView) findViewById(R.id.wb_home);
         if (webview != null) {
             webSettings = webview.getSettings();
@@ -50,6 +61,7 @@ public class HomeActivity extends AppCompatActivity {
             view.loadUrl(url);
             return true;
         }
+
     }
 
     @Override
@@ -101,6 +113,5 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
     }
-
 
 }
