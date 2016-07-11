@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 
 public class HomeActivity extends AppCompatActivity {
-        private CoordinatorLayout mainContent;
+    private CoordinatorLayout mainContent;
     private AppBarLayout appbar;
     private Toolbar toolBar;
     private WebView webview;
@@ -44,6 +44,7 @@ public class HomeActivity extends AppCompatActivity {
         appbar = (AppBarLayout) findViewById(R.id.appbar);
         toolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
+
         webview = (WebView) findViewById(R.id.wb_home);
         if (webview != null) {
             webSettings = webview.getSettings();
@@ -53,6 +54,7 @@ public class HomeActivity extends AppCompatActivity {
         webview.setWebViewClient(client);
         webview.loadUrl("http://www.baidu.com");
         webSettings.setJavaScriptEnabled(true);
+
     }
 
     private class OwnerWebview extends WebViewClient {
