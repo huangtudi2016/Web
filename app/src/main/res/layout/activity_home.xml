@@ -23,6 +23,12 @@
             app:layout_scrollFlags="scroll|enterAlways">
 
         </android.support.v7.widget.Toolbar>
+        <ProgressBar
+            android:id="@+id/pb_home"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:progressDrawable="@drawable/progressbar"
+            style="@android:style/Widget.ProgressBar.Horizontal"/>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
@@ -39,7 +45,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_gravity="bottom"
         android:background="@color/colorPrimary"
         >
@@ -48,6 +54,7 @@
             android:id="@+id/pre_home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="3dp"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:src="@drawable/pre_button"
@@ -57,24 +64,38 @@
             android:id="@+id/next_home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="3dp"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:src="@drawable/next_button"
             />
 
+
         <ImageButton
             android:id="@+id/tools_home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="3dp"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:src="@drawable/tools_button"
             />
 
         <ImageButton
+            android:id="@+id/home_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:src="@drawable/home_button"
+            />
+
+        <ImageButton
             android:id="@+id/window_home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="3dp"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:src="@drawable/window_button"

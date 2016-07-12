@@ -2,6 +2,7 @@ package com.huangzan.web;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,19 +12,41 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.huangzan.web.common.ToolsPopWindow;
 
-public class HomeActivity extends AppCompatActivity {
+
+public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = "HomeActivity";
     private CoordinatorLayout mainContent;
     private AppBarLayout appbar;
     private Toolbar toolBar;
     private WebView webview;
+    //进度条
+    private ProgressBar progressBar;
+    /*底部按钮*/
+    private ImageButton preButton;
+    private ImageButton nextButton;
+    private ImageButton homeButton;
+    private ImageButton toolsButton;
+    private ImageButton windowButton;
+
+private ToolsPopWindow toolsPopWindow;
+
     private WebSettings webSettings;
     private WebViewClient client;
 
@@ -40,9 +63,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        mainContent = (CoordinatorLayout) findViewById(R.id.main_content);
-        appbar = (AppBarLayout) findViewById(R.id.appbar);
-        toolBar = (Toolbar) findViewById(R.id.toolbar);
+        initView();
         setSupportActionBar(toolBar);
 
         webview = (WebView) findViewById(R.id.wb_home);
@@ -50,10 +71,29 @@ public class HomeActivity extends AppCompatActivity {
             webSettings = webview.getSettings();
         }
         client = new OwnerWebview();
-        webSettings.setDefaultTextEncodingName("utf-8");
         webview.setWebViewClient(client);
+        webview.setWebChromeClient(new OwnChomeClient());
         webview.loadUrl("http://www.baidu.com");
-        webSettings.setJavaScriptEnabled(true);
+        preButton.setOnClickListener(this);
+        nextButton.setOnClickListener(this);
+        homeButton.setOnClickListener(this);
+        toolsButton.setOnClickListener(this);
+        windowButton.setOnClickListener(this);
+
+        toolsPopWindow = new ToolsPopWindow(this, this.getWindowManager().getDefaultDisplay().getWidth()-30,
+                this.getWindowManager().getDefaultDisplay().getHeight()/3);
+    }
+
+    private void initView() {
+        mainContent = (CoordinatorLayout) findViewById(R.id.main_content);
+        appbar = (AppBarLayout) findViewById(R.id.appbar);
+        toolBar = (Toolbar) findViewById(R.id.toolbar);
+        progressBar = (ProgressBar) findViewById(R.id.pb_home);
+        preButton = (ImageButton) findViewById(R.id.pre_home);
+        nextButton = (ImageButton) findViewById(R.id.next_home);
+        homeButton = (ImageButton) findViewById(R.id.home_home);
+        toolsButton = (ImageButton) findViewById(R.id.tools_home);
+        windowButton = (ImageButton) findViewById(R.id.window_home);
 
     }
 
@@ -64,6 +104,13 @@ public class HomeActivity extends AppCompatActivity {
             return true;
         }
 
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            view.getSettings().setDefaultTextEncodingName("utf-8");
+            view.getSettings().setJavaScriptEnabled(true);
+            changeStatueOfWebToolsButton();
+        }
     }
 
     @Override
@@ -116,4 +163,71 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.pre_home:
+                Log.i(TAG, "pre_home is pressed");
+                if (webview.canGoBack()) {
+                    webview.goBack();
+                }
+                break;
+            case R.id.next_home:
+                if (webview.canGoForward()) {
+                    webview.goForward();
+                }
+                break;
+            case R.id.tools_home:
+                LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+                View toolView = inflater.inflate(R.layout.activity_tools, null);
+                toolsPopWindow.showAtLocation(toolView, Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, toolsButton.getHeight()+20);
+                Button refresh = (Button) toolsPopWindow.getView(R.id.tools_normal_refresh);
+                Button favorites = (Button) toolsPopWindow.getView(R.id.tools_normal_favorites);
+                refresh.setOnClickListener(this);
+                favorites.setOnClickListener(this);
+                break;
+            case R.id.home_home:
+                webview.loadUrl("http://www.baidu.com");
+                break;
+            case R.id.window_home:
+                break;
+            case R.id.tools_normal_refresh:
+               webview.loadUrl(webview.getOriginalUrl());
+            default:
+                break;
+        }
+    }
+
+    private class OwnChomeClient extends WebChromeClient {
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            super.onProgressChanged(view, newProgress);
+            if (newProgress == 100) {
+                progressBar.setVisibility(View.INVISIBLE);
+            } else {
+                progressBar.setVisibility(View.VISIBLE);
+                progressBar.setProgress(newProgress);
+            }
+        }
+
+    }
+    /**
+     * 设置工具栏回溯历史是否可用
+     * */
+    private void changeStatueOfWebToolsButton(){
+        if(webview.canGoBack()){
+            //设置可使用状态
+            preButton.setEnabled(true);
+        }else{
+            //设置禁止状态
+            preButton.setEnabled(false);
+        }
+        if(webview.canGoForward()){
+            //设置可使用状态
+            nextButton.setEnabled(true);
+        }else{
+            //设置禁止状态
+            nextButton.setEnabled(false);
+        }
+    }
 }

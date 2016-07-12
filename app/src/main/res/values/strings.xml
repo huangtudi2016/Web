@@ -3,4 +3,6 @@
     <string name="searchLabel">搜索</string>
     <string name="searchHint">请输入</string>
     <string name="menu_search">搜索</string>
+    <string name="refresh">刷新</string>
+    <string name="favorite">书签</string>
 </resources>
