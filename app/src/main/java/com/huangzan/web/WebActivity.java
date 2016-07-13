@@ -2,8 +2,6 @@ package com.huangzan.web;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,7 +11,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import com.huangzan.web.common.ToolsPopWindow;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 
 public class WebActivity extends AppCompatActivity implements View.OnClickListener {
@@ -21,10 +20,10 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
     //进度条
     private ProgressBar progressBar;
 
-    private ToolsPopWindow toolsPopWindow;
-
     private WebSettings webSettings;
     private WebViewClient client;
+
+    private static int count = 0;
 
 
     @Override
@@ -43,21 +42,38 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
         String query = intent.getStringExtra("query");
         if (TextUtils.isEmpty(query)) {
             webview.loadUrl("http://www.baidu.com");
-        }else {
+        } else {
             webview.loadUrl("http://www.baidu.com/s?wd=" + query);
         }
         webSettings.setDefaultTextEncodingName("utf-8");
         webSettings.setJavaScriptEnabled(true);
 
-        toolsPopWindow = new ToolsPopWindow(this, this.getWindowManager().getDefaultDisplay().getWidth() - 30, this.getWindowManager().getDefaultDisplay().getHeight() / 3);
+        final FloatingActionsMenu fabWeb = (FloatingActionsMenu) findViewById(R.id.fab_web);
 
-        FloatingActionButton fabWeb = (FloatingActionButton) findViewById(R.id.fab_web);
-        fabWeb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }
-        });
+        if (fabWeb != null) {
+            final FloatingActionButton refreshWeb = (FloatingActionButton) findViewById(R.id.action_refresh_web);
+            final FloatingActionButton closeWeb = (FloatingActionButton) findViewById(R.id.action_close_web);
+            refreshWeb.setOnClickListener(this);
+            closeWeb.setOnClickListener(this);
+//            FloatingActionButton actionC = new FloatingActionButton(getBaseContext());
+//            actionC.setTitle("Hide/Show Action above");
+//            actionC.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    refreshWeb.setVisibility(actionB.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+//                }
+//            });
+
+//            fabWeb.addButton(actionC);
+//            actionA.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    actionA.setTitle("Action A clicked");
+//                }
+//            });
+
+        }
+
     }
 
     private void initView() {
@@ -68,11 +84,10 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
     private class OwnerWebview extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return super.shouldOverrideUrlLoading(view,url);
+            return super.shouldOverrideUrlLoading(view, url);
         }
 
     }
-
 
 
     @Override
@@ -87,7 +102,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-//        switch (view.getId()) {
+        switch (view.getId()) {
 //            case R.id.pre_home:
 ////                Log.i(TAG, "pre_home is pressed");
 //                if (webview.canGoBack()) {
@@ -113,15 +128,20 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
 //                break;
 //            case R.id.window_home:
 //                break;
-//            case R.id.tools_normal_refresh:
-//                webview.loadUrl(webview.getOriginalUrl());
-//                break;
+            case R.id.action_refresh_web:
+                webview.loadUrl(webview.getOriginalUrl());
+                break;
+            case R.id.action_close_web:
+                webview.loadUrl("");
+                webview=null;
+                finish();
+                break;
 //            case R.id.tools_normal_favorites:
 //
 //                break;
-//            default:
-//                break;
-//        }
+            default:
+                break;
+        }
     }
 
     private class OwnChomeClient extends WebChromeClient {
