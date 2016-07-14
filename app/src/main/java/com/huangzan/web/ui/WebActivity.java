@@ -1,4 +1,4 @@
-package com.huangzan.web;
+package com.huangzan.web.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.huangzan.web.R;
 
 
 public class WebActivity extends AppCompatActivity implements View.OnClickListener {
@@ -55,22 +56,6 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
             final FloatingActionButton closeWeb = (FloatingActionButton) findViewById(R.id.action_close_web);
             refreshWeb.setOnClickListener(this);
             closeWeb.setOnClickListener(this);
-//            FloatingActionButton actionC = new FloatingActionButton(getBaseContext());
-//            actionC.setTitle("Hide/Show Action above");
-//            actionC.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    refreshWeb.setVisibility(actionB.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-//                }
-//            });
-
-//            fabWeb.addButton(actionC);
-//            actionA.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    actionA.setTitle("Action A clicked");
-//                }
-//            });
 
         }
 
@@ -103,31 +88,6 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-//            case R.id.pre_home:
-////                Log.i(TAG, "pre_home is pressed");
-//                if (webview.canGoBack()) {
-//                    webview.goBack();
-//                }
-//                break;
-//            case R.id.next_home:
-//                if (webview.canGoForward()) {
-//                    webview.goForward();
-//                }
-//                break;
-//            case R.id.tools_home:
-//                LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-//                View toolView = inflater.inflate(R.layout.activity_tools, null);
-//                toolsPopWindow.showAtLocation(toolView, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, toolsButton.getHeight() + 20);
-//                Button refresh = (Button) toolsPopWindow.getView(R.id.tools_normal_refresh);
-//                Button favorites = (Button) toolsPopWindow.getView(R.id.tools_normal_favorites);
-//                refresh.setOnClickListener(this);
-//                favorites.setOnClickListener(this);
-//                break;
-//            case R.id.home_home:
-//                webview.loadUrl("http://www.baidu.com");
-//                break;
-//            case R.id.window_home:
-//                break;
             case R.id.action_refresh_web:
                 webview.loadUrl(webview.getOriginalUrl());
                 break;
@@ -136,9 +96,6 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
                 webview=null;
                 finish();
                 break;
-//            case R.id.tools_normal_favorites:
-//
-//                break;
             default:
                 break;
         }

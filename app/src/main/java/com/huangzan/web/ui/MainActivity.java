@@ -1,4 +1,4 @@
-package com.huangzan.web;
+package com.huangzan.web.ui;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -21,9 +21,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.huangzan.web.R;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private Button webButton;
+    private Button wetherButton;
 
     private static boolean isExit = false;
     private static Handler handler = new Handler() {
@@ -59,21 +62,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         initView();
+        webButton.setOnClickListener(this);
+        wetherButton.setOnClickListener(this);
     }
 
     private void initView() {
         webButton = (Button) findViewById(R.id.main_web);
-//        mImageNoTransparent = (Button) findViewById(R.id.image_transparent);
-//        mImageTransparent = (Button) findViewById(R.id.image_translucent);
-//        mToolbarTabLayout = (Button) findViewById(R.id.toolbar_tabLayout);
-//        mDrawerToolbarTabLayout = (Button) findViewById(R.id.drawer_toolbar_tabLayout);
-//        mCollapsingCoolbarLayout = (Button) findViewById(R.id.collapsing_toolbarLayout);
-        webButton.setOnClickListener(this);
-//        mImageNoTransparent.setOnClickListener(this);
-//        mImageTransparent.setOnClickListener(this);
-//        mToolbarTabLayout.setOnClickListener(this);
-//        mDrawerToolbarTabLayout.setOnClickListener(this);
-//        mCollapsingCoolbarLayout.setOnClickListener(this);
+        wetherButton = (Button) findViewById(R.id.main_wether);
     }
 
     @Override
@@ -82,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.main_web:
                 Intent intent1 = new Intent(MainActivity.this, WebActivity.class);
                 startActivity(intent1);
+                break;
+            case R.id.main_wether:
+                Intent intent2 = new Intent(MainActivity.this, WeatherActivity.class);
+                startActivity(intent2);
                 break;
             default:
                 break;
@@ -131,11 +130,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent1 = new Intent(MainActivity.this, WebActivity.class);
             intent1.putExtra("query", query);
             startActivity(intent1);
-//            if (query.startsWith("http://")) {
-//                webview.loadUrl(query);
-//            } else {
-//                webview.loadUrl("http://www.baidu.com/baidu?word=" + query);
-//            }
 
         }
     }

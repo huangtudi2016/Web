@@ -17,34 +17,40 @@
         android:layout_height="wrap_content"
         android:text="@string/web"/>
 
-    <!--<Button-->
-        <!--android:id="@+id/image_transparent"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Image Transparent"/>-->
+    <Button
+        android:id="@+id/main_wether"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/wether"/>
 
     <!--<Button-->
-        <!--android:id="@+id/image_translucent"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Image Translucent"/>-->
+    <!--android:id="@+id/image_transparent"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Image Transparent"/>-->
 
     <!--<Button-->
-        <!--android:id="@+id/toolbar_tabLayout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Toolbar TabLayout"/>-->
+    <!--android:id="@+id/image_translucent"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Image Translucent"/>-->
 
     <!--<Button-->
-        <!--android:id="@+id/drawer_toolbar_tabLayout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Drawer Toolbar TabLayout"/>-->
+    <!--android:id="@+id/toolbar_tabLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Toolbar TabLayout"/>-->
 
     <!--<Button-->
-        <!--android:id="@+id/collapsing_toolbarLayout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="CollapsingToolbarLayout"/>-->
+    <!--android:id="@+id/drawer_toolbar_tabLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Drawer Toolbar TabLayout"/>-->
+
+    <!--<Button-->
+    <!--android:id="@+id/collapsing_toolbarLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="CollapsingToolbarLayout"/>-->
 
 </LinearLayout>
