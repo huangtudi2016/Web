@@ -75,7 +75,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
             closeWeb.setIcon(R.drawable.ic_close_black);
 
             isBookMark = favAndHisManager.isBookMarkExist(webview.getUrl());
-            Log.i("11111111111111","isBookMark:"+isBookMark);
+            Log.i("11111111111111", "isBookMark:" + isBookMark);
             changeBookMarkIcon();
 
         }
@@ -85,7 +85,9 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     protected void onDestroy() {
-        favAndHisManager.closeDB();
+        if (favAndHisManager != null) {
+            favAndHisManager.closeDB();
+        }
         super.onDestroy();
     }
 
@@ -113,7 +115,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             isBookMark = favAndHisManager.isBookMarkExist(url);
-            Log.i("22222222222222","isBookMark:"+isBookMark);
+            Log.i("22222222222222", "isBookMark:" + isBookMark);
             changeBookMarkIcon();
         }
 
@@ -143,7 +145,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.action_bookmark_web:
                 isBookMark = favAndHisManager.isBookMarkExist(webview.getUrl());
-                Log.i("333333333","isBookMark:"+isBookMark);
+                Log.i("333333333", "isBookMark:" + isBookMark);
                 if (!isBookMark) {
                     bookmarkWeb.setIcon(R.drawable.ic_star_black);
                     BookMark bookMark = new BookMark();
