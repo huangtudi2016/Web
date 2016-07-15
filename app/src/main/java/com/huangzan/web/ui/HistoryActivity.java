@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -18,6 +19,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -40,6 +43,7 @@ public class HistoryActivity extends AppCompatActivity {
     public static final int RESULT_FAV_HIS = 0;
     public static final int RESULT_DEFAULT = -1;
 
+    private FrameLayout frameLayout;
     //收藏历史按钮
     private Button bookmark;
     private Button history;
@@ -109,6 +113,8 @@ public class HistoryActivity extends AppCompatActivity {
 
         bookmarkContent = (ListView) this.findViewById(R.id.bookmark_bh_bhactivity);
         historyContent = (ListView) this.findViewById(R.id.history_bh_bhactivity);
+
+        frameLayout = (FrameLayout) findViewById(R.id.fragment_bhactivity);
     }
 
 
@@ -308,11 +314,19 @@ public class HistoryActivity extends AppCompatActivity {
                         BookMark bookMark = new BookMark(Integer.valueOf(item_id), item_url_input.getText().toString(), item_name_input.getText().toString());
                         boolean result = markAndHisManager.updateBookMark(bookMark);
                         if (result) {
-                            Toast.makeText(HistoryActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(HistoryActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                            Snackbar snackbarModifySuccess = Snackbar.make(frameLayout,"修改成功",Snackbar.LENGTH_SHORT);
+                            View snackbarView = snackbarModifySuccess.getView();
+                            snackbarView.setBackgroundColor(getResources().getColor(R.color.half_blue));
+                            snackbarModifySuccess.show();
                             initDataBookmarks();
                             bookmarkContent.invalidate();
                         } else {
-                            Toast.makeText(HistoryActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
+                            Snackbar snackbarModifyFail = Snackbar.make(frameLayout,"修改失败",Snackbar.LENGTH_SHORT);
+                            View snackbarView = snackbarModifyFail.getView();
+                            snackbarView.setBackgroundColor(getResources().getColor(R.color.half_blue));
+                            snackbarModifyFail.show();
+//                            Toast.makeText(HistoryActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -324,11 +338,19 @@ public class HistoryActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         if (markAndHisManager.deleteBookMark(item_url)) {
                             //删除成功
-                            Toast.makeText(HistoryActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                            Snackbar snackbarDeleteSuccess = Snackbar.make(frameLayout,"删除成功",Snackbar.LENGTH_SHORT);
+                            View snackbarView = snackbarDeleteSuccess.getView();
+                            snackbarView.setBackgroundColor(getResources().getColor(R.color.half_blue));
+                            snackbarDeleteSuccess.show();
+//                            Toast.makeText(HistoryActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                             initDataBookmarks();
                             bookmarkContent.invalidate();
                         } else {
-                            Toast.makeText(HistoryActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+                            Snackbar snackbarDeleteFail = Snackbar.make(frameLayout,"删除失败",Snackbar.LENGTH_SHORT);
+                            View snackbarView = snackbarDeleteFail.getView();
+                            snackbarView.setBackgroundColor(getResources().getColor(R.color.half_blue));
+                            snackbarDeleteFail.show();
+//                            Toast.makeText(HistoryActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).setNegativeButton("取消", null).create().show();
