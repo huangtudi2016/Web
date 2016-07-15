@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by huangzan on 16/7/14.
  */
 public class HistoryWeb {
-    private long id;
+    private int id;
     private String name;
     private String url;
     private long date;
@@ -14,7 +14,7 @@ public class HistoryWeb {
     public HistoryWeb() {
     }
 
-    public HistoryWeb(long id, String name, String url, long date) {
+    public HistoryWeb(int id, String name, String url, long date) {
         this.id = id;
         this.name = name;
         this.url = url;
@@ -37,11 +37,11 @@ public class HistoryWeb {
         this.name = name;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

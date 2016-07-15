@@ -4,24 +4,24 @@ package com.huangzan.web.module;
  * Created by huangzan on 16/7/14.
  */
 public class BookMark {
-    private long id;
+    private int id;
     private String name;
     private String url;
 
     public BookMark(){
 
     }
-    public BookMark(long id,String url, String name) {
+    public BookMark(int id,String url, String name) {
         this.id = id;
         this.url = url;
         this.name = name;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

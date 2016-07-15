@@ -21,6 +21,7 @@ import com.huangzan.web.module.BookMark;
 
 
 public class WebActivity extends AppCompatActivity implements View.OnClickListener {
+    private final static String TAG = "WebActivity";
     private WebView webview;
     //进度条
     private ProgressBar progressBar;
@@ -52,10 +53,13 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
         webview.setWebChromeClient(new OwnChomeClient());
         Intent intent = getIntent();
         String query = intent.getStringExtra("query");
-        if (TextUtils.isEmpty(query)) {
+        String url = intent.getStringExtra("url");
+        if (TextUtils.isEmpty(query)&&TextUtils.isEmpty(url)) {
             webview.loadUrl("http://www.baidu.com");
-        } else {
+        } else if(!TextUtils.isEmpty(query)){
             webview.loadUrl("http://www.baidu.com/s?wd=" + query);
+        }else if(!TextUtils.isEmpty(url)){
+            webview.loadUrl(url);
         }
 
         webSettings.setDefaultTextEncodingName("utf-8");
@@ -75,7 +79,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
             closeWeb.setIcon(R.drawable.ic_close_black);
 
             isBookMark = favAndHisManager.isBookMarkExist(webview.getUrl());
-            Log.i("11111111111111", "isBookMark:" + isBookMark);
+            Log.d(TAG+"1111111111", "isBookMark:" + isBookMark);
             changeBookMarkIcon();
 
         }
@@ -115,7 +119,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             isBookMark = favAndHisManager.isBookMarkExist(url);
-            Log.i("22222222222222", "isBookMark:" + isBookMark);
+            Log.d(TAG+"222222", "isBookMark:" + isBookMark);
             changeBookMarkIcon();
         }
 
@@ -145,7 +149,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.action_bookmark_web:
                 isBookMark = favAndHisManager.isBookMarkExist(webview.getUrl());
-                Log.i("333333333", "isBookMark:" + isBookMark);
+                Log.d(TAG+"333333333", "isBookMark:" + isBookMark);
                 if (!isBookMark) {
                     bookmarkWeb.setIcon(R.drawable.ic_star_black);
                     BookMark bookMark = new BookMark();

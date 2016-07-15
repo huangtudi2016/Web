@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.huangzan.web.module.BookMark;
 
@@ -13,10 +14,10 @@ import java.util.List;
 
 public class SQLManager {
 
+    private static final String DEG_TAG = "SQLManager";
+
     private DBHelper helper;
     private SQLiteDatabase db;
-
-    private boolean flag = false;
 
 
     public SQLManager(Context context) {
@@ -34,7 +35,12 @@ public class SQLManager {
     public void addBookMark(BookMark bookMark) {
         db.beginTransaction();
         try {
-            db.execSQL("INSERT INTO bookmark VALUES(null, ?, ?)", new Object[]{bookMark.getName(), bookMark.getUrl()});
+            ContentValues values = new ContentValues();
+            values.put("name", bookMark.getName());
+            values.put("url", bookMark.getUrl());
+            long rowid = db.insert("bookmark", null, values);
+            Log.i(DEG_TAG,"rowid---------:"+rowid);
+//            db.execSQL("INSERT INTO bookmark(name,url) VALUES( ?, ?)", new Object[]{bookMark.getName(), bookMark.getUrl()});
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -49,11 +55,16 @@ public class SQLManager {
      * @return 修改成功与否 true 成功,flase 失败
      */
     public boolean updateBookMark(BookMark bookMark) {
+        boolean flag = false;
+        Log.i(DEG_TAG,"id:"+bookMark.getId());
+        Log.i(DEG_TAG,"name:"+bookMark.getName());
+        Log.i(DEG_TAG,"url:"+bookMark.getUrl());
         ContentValues cv = new ContentValues();
         cv.put("name", bookMark.getName());
         cv.put("url", bookMark.getUrl());
         int rowNum = db.update("bookmark", cv, "id=?", new String[]{String.valueOf(bookMark.getId())});
-        if (rowNum != 0) {
+        Log.i(DEG_TAG,"rowNum:"+rowNum);
+        if (rowNum > 0) {
             flag = true;
         }
         return flag;
@@ -66,6 +77,7 @@ public class SQLManager {
      * @return 删除成功与否 true 成功,flase 失败
      */
     public boolean deleteBookMark(String url) {
+        boolean flag = false;
         int result = db.delete("bookmark", "url=?", new String[]{url});
         if (result != -1) {
             flag = true;
@@ -78,9 +90,10 @@ public class SQLManager {
         Cursor cursor = queryTheCursor();
         while (cursor.moveToNext()) {
             BookMark bookMark = new BookMark();
-            bookMark.setId(Long.valueOf(cursor.getColumnIndex("_id")));
-            bookMark.setName(cursor.getString(cursor.getColumnIndex("name")));
-            bookMark.setUrl(cursor.getString(cursor.getColumnIndex("url")));
+            Log.i(DEG_TAG,"cursorid:"+cursor.getInt(0));
+            bookMark.setId(cursor.getInt(0));
+            bookMark.setName(cursor.getString(1));
+            bookMark.setUrl(cursor.getString(2));
             bookMarks.add(bookMark);
         }
         cursor.close();

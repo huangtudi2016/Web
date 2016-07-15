@@ -11,9 +11,9 @@ public class DBHelper extends SQLiteOpenHelper{
 	private static final int DATABASE_VERSION = 1;
 
 	public static final String CREATE_TABLE_BOOKMARKS =
-			"CREATE TABLE IF NOT EXISTS bookmark (id INTEGER PRIMARY KEY, name TEXT NOT NULL, url TEXT NOT NULL)";
+			"CREATE TABLE IF NOT EXISTS bookmark (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, url TEXT NOT NULL)";
 	public static final String CREATE_TABLE_HISTORY =
-			"CREATE TABLE IF NOT EXISTS history (id INTEGER PRIMARY KEY, name TEXT NOT NULL, url TEXT NOT NULL, date LONG NOT NULL)";
+			"CREATE TABLE IF NOT EXISTS history (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, url TEXT NOT NULL, date LONG NOT NULL)";
 
 	public DBHelper(Context context){
 		//CursorFactory设置为null,使用默认值
