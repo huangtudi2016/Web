@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 fab:fab_colorNormal="@color/white"
                 fab:fab_colorPressed="@color/white_pressed"
-                android:src="@mipmap/refresh"/>
+                />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/action_close_web"
@@ -67,7 +67,15 @@
                 android:layout_height="wrap_content"
                 fab:fab_colorNormal="@color/white"
                 fab:fab_colorPressed="@color/white_pressed"
-                android:src="@mipmap/close"/>
+                />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_bookmark_web"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/white"
+                fab:fab_colorPressed="@color/white_pressed"
+                />
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
     </RelativeLayout>

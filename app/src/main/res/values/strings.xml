@@ -2,7 +2,7 @@
     <string name="app_name">Web</string>
     <string name="searchLabel">搜索</string>
     <string name="searchHint">请输入</string>
-    <string name="menu_search">搜索</string>
+    <string name="menu_search">网址|关键字</string>
     <string name="refresh">刷新</string>
     <string name="favorite">书签</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
