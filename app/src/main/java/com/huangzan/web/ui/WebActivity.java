@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -54,11 +55,15 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
         Intent intent = getIntent();
         String query = intent.getStringExtra("query");
         String url = intent.getStringExtra("url");
-        if (TextUtils.isEmpty(query)&&TextUtils.isEmpty(url)) {
+        if (TextUtils.isEmpty(query) && TextUtils.isEmpty(url)) {
             webview.loadUrl("http://www.baidu.com");
-        } else if(!TextUtils.isEmpty(query)){
-            webview.loadUrl("http://www.baidu.com/s?wd=" + query);
-        }else if(!TextUtils.isEmpty(url)){
+        } else if (!TextUtils.isEmpty(query)) {
+            if (URLUtil.isNetworkUrl(query)) {
+                webview.loadUrl(query);
+            } else {
+                webview.loadUrl("http://www.baidu.com/s?wd=" + query);
+            }
+        } else if (!TextUtils.isEmpty(url)) {
             webview.loadUrl(url);
         }
 
@@ -79,7 +84,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
             closeWeb.setIcon(R.drawable.ic_close_black);
 
             isBookMark = favAndHisManager.isBookMarkExist(webview.getUrl());
-            Log.d(TAG+"1111111111", "isBookMark:" + isBookMark);
+            Log.d(TAG + "1111111111", "isBookMark:" + isBookMark);
             changeBookMarkIcon();
 
         }
@@ -119,7 +124,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             isBookMark = favAndHisManager.isBookMarkExist(url);
-            Log.d(TAG+"222222", "isBookMark:" + isBookMark);
+            Log.d(TAG + "222222", "isBookMark:" + isBookMark);
             changeBookMarkIcon();
         }
 
@@ -149,7 +154,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.action_bookmark_web:
                 isBookMark = favAndHisManager.isBookMarkExist(webview.getUrl());
-                Log.d(TAG+"333333333", "isBookMark:" + isBookMark);
+                Log.d(TAG + "333333333", "isBookMark:" + isBookMark);
                 if (!isBookMark) {
                     bookmarkWeb.setIcon(R.drawable.ic_star_black);
                     BookMark bookMark = new BookMark();
