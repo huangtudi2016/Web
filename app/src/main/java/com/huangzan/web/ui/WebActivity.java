@@ -19,6 +19,7 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.huangzan.web.R;
 import com.huangzan.web.db.SQLManager;
 import com.huangzan.web.module.BookMark;
+import com.huangzan.web.module.HistoryWeb;
 
 
 public class WebActivity extends AppCompatActivity implements View.OnClickListener {
@@ -126,6 +127,12 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
             isBookMark = favAndHisManager.isBookMarkExist(url);
             Log.d(TAG + "222222", "isBookMark:" + isBookMark);
             changeBookMarkIcon();
+
+            HistoryWeb historyWeb = new HistoryWeb();
+            historyWeb.setName(view.getTitle());
+            historyWeb.setUrl(view.getUrl());
+            historyWeb.setDate(System.currentTimeMillis());
+            favAndHisManager.addHistory(historyWeb);
         }
 
     }

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.huangzan.web.module.BookMark;
+import com.huangzan.web.module.HistoryWeb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,8 +87,8 @@ public class SQLManager {
     }
 
     public List<BookMark> getAllBookMark() {
-        ArrayList<BookMark> bookMarks = new ArrayList<>();
-        Cursor cursor = queryTheCursor();
+        List<BookMark> bookMarks = new ArrayList<BookMark>();
+        Cursor cursor = queryTheCursor("bookmark");
         while (cursor.moveToNext()) {
             BookMark bookMark = new BookMark();
             Log.i(DEG_TAG,"cursorid:"+cursor.getInt(0));
@@ -105,8 +106,8 @@ public class SQLManager {
      *
      * @return Cursor
      */
-    public Cursor queryTheCursor() {
-        Cursor c = db.rawQuery("SELECT * FROM bookmark", null);
+    public Cursor queryTheCursor(String tableName) {
+        Cursor c = db.rawQuery("SELECT * FROM "+tableName , null);
         return c;
     }
 
@@ -128,6 +129,73 @@ public class SQLManager {
 
     }
 
+    /**
+     * 添加历史记录
+     *
+     * @param history 历史纪录
+     */
+    public void addHistory(HistoryWeb history) {
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put("name", history.getName());
+            values.put("url", history.getUrl());
+            values.put("date", history.getDate());
+            long rowid = db.insert("history", null, values);
+            Log.i(DEG_TAG,"rowid history--------:"+rowid);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+
+    }
+
+    public List<HistoryWeb> getAllHistory() {
+        List<HistoryWeb> historyWebs = new ArrayList<HistoryWeb>();
+        Cursor cursor = queryTheCursor("history");
+        while (cursor.moveToNext()) {
+            HistoryWeb historyWeb = new HistoryWeb();
+            Log.i(DEG_TAG,"history cursorid:"+cursor.getInt(0));
+            historyWeb.setId(cursor.getInt(0));
+            historyWeb.setName(cursor.getString(1));
+            historyWeb.setUrl(cursor.getString(2));
+            historyWeb.setDate(cursor.getLong(3));
+            historyWebs.add(historyWeb);
+        }
+        cursor.close();
+        return historyWebs;
+    }
+
+    /**
+     * 删除单个历史记录
+     *
+     * @param date 浏览时间
+     * @return 删除成功与否 true 成功,flase 失败
+     */
+    public boolean deleteHistory(long date) {
+        boolean flag = false;
+        int result = db.delete("history", "date=?", new String[]{String.valueOf(date)});
+        if (result != -1) {
+            flag = true;
+        }
+        return flag;
+    }
+
+    /**
+     * 删除所有历史记录
+     *
+     * @return 删除成功与否 true 成功,flase 失败
+     */
+    public boolean deleteAllHistory() {
+        boolean flag = false;
+        int result = db.delete("history", null, null);
+//        db.execSQL("select * from sqlite_sequence");
+//        db.execSQL("UPDATE sqlite_sequence SET seq = 0 WHERE name = ‘history’;");
+        if (result != -1) {
+            flag = true;
+        }
+        return flag;
+    }
     /**
      * close database
      */

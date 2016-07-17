@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,17 +90,17 @@ public class HistoryActivity extends AppCompatActivity {
         history.setOnClickListener(buttonClickedListener);
 //
         bookmarkContent.setOnItemLongClickListener(itemLongListener);
-//		historyContent.setOnItemLongClickListener(itemLongListener);
+        historyContent.setOnItemLongClickListener(itemLongListener);
 
         bookmarkContent.setOnItemClickListener(itemClickedListener);
-//		historyContent.setOnItemClickListener(itemClickedListener);
+        historyContent.setOnItemClickListener(itemClickedListener);
 
         screenWidth = getWindowManager().getDefaultDisplay().getWidth();
         screenHeight = getWindowManager().getDefaultDisplay().getHeight();
 
         //初始化数据
         initDataBookmarks();
-//		initDataHistory();
+        initDataHistory();
 
         //添加默认返回值
         setResult(RESULT_DEFAULT);
@@ -126,13 +127,13 @@ public class HistoryActivity extends AppCompatActivity {
         //获取书签管理
         markAndHisManager = new SQLManager(this);
         bookMarks = markAndHisManager.getAllBookMark();
-        bookmarkContent.setAdapter(new MyAdapter(this));
+        bookmarkContent.setAdapter(new MyBookMarkAdapter(this));
     }
 
-    private class MyAdapter extends BaseAdapter {
+    private class MyBookMarkAdapter extends BaseAdapter {
         private LayoutInflater mInflater;//得到一个LayoutInfalter对象用来导入布局 /*构造函数*/
 
-        public MyAdapter(Context context) {
+        public MyBookMarkAdapter(Context context) {
             this.mInflater = LayoutInflater.from(context);
         }
 
@@ -180,20 +181,63 @@ public class HistoryActivity extends AppCompatActivity {
 
     }
 
-//	/**
-//	 * 初始化ListView中History的数据
-//	 * */
-//	@SuppressWarnings("deprecation")
-//	private void initDataHistory() {
-//		//获取书签管理
-//		this.favAndHisManager = new FavAndHisManager(this);
-//		this.favAndHisCursor = this.favAndHisManager.getAllHistories();
-//		this.favAndHisAdapter = new SimpleCursorAdapter(getApplicationContext(),
-//				R.layout.list_item, this.favAndHisCursor,
-//				new String[]{"_id","name","url","date"},
-//				new int[]{R.id.item_id, R.id.item_name,R.id.item_url,R.id.item_date});
-//		this.historyContent.setAdapter(this.favAndHisAdapter);
-//	}
+
+    /**
+     * 初始化ListView中History的数据
+     */
+    @SuppressWarnings("deprecation")
+    private void initDataHistory() {
+        //获取历史记录管理
+        markAndHisManager = new SQLManager(this);
+        historyWebs = markAndHisManager.getAllHistory();
+        historyContent.setAdapter(new MyHistoryAdapter(this));
+    }
+
+    private class MyHistoryAdapter extends BaseAdapter {
+        private LayoutInflater mInflater;//得到一个LayoutInfalter对象用来导入布局 /*构造函数*/
+
+        public MyHistoryAdapter(Context context) {
+            this.mInflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount() {
+            return historyWebs.size();
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            ViewHolder holder;
+            if (view == null) {
+                view = mInflater.inflate(R.layout.list_item, null);
+                holder = new ViewHolder();
+                holder.id = (TextView) view.findViewById(R.id.item_id);
+                holder.name = (TextView) view.findViewById(R.id.item_name);
+                holder.url = (TextView) view.findViewById(R.id.item_url);
+                holder.date = (TextView) view.findViewById(R.id.item_date);
+                view.setTag(holder);
+            } else {
+                holder = (ViewHolder) view.getTag();
+            }
+            Log.i(DEG_TAG, "id:" + historyWebs.get(i).getId());
+            holder.id.setText(String.valueOf(historyWebs.get(i).getId()));
+            holder.name.setText(historyWebs.get(i).getName());
+            holder.url.setText(historyWebs.get(i).getUrl());
+            holder.date.setText(String.valueOf(historyWebs.get(i).getDate()));
+            return view;
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+    }
+
 
     /**
      * 长按单项事件
@@ -287,17 +331,20 @@ public class HistoryActivity extends AppCompatActivity {
         private String item_id;
         private String item_name;
         private String item_url;
+        private String item_date;
 
         public ItemClickedListener(View item) {
             this.item_id = ((TextView) item.findViewById(R.id.item_id)).getText().toString();
             this.item_name = ((TextView) item.findViewById(R.id.item_name)).getText().toString();
             this.item_url = ((TextView) item.findViewById(R.id.item_url)).getText().toString();
+            this.item_date = ((TextView)item.findViewById(R.id.item_date)).getText().toString();
         }
 
         @Override
         public void onClick(View view) {
             //取消弹窗
             itemLongClickedPopWindow.dismiss();
+
             if (view.getId() == R.id.item_longclicked_modifyFavorites) {
                 //弹出修改窗口
                 LayoutInflater modifyFavoritesInflater = LayoutInflater.from(HistoryActivity.this);
@@ -315,77 +362,90 @@ public class HistoryActivity extends AppCompatActivity {
                         boolean result = markAndHisManager.updateBookMark(bookMark);
                         if (result) {
 //                            Toast.makeText(HistoryActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
-                            Snackbar snackbarModifySuccess = Snackbar.make(frameLayout,"修改成功",Snackbar.LENGTH_SHORT);
-                            View snackbarView = snackbarModifySuccess.getView();
-                            snackbarView.setBackgroundColor(getResources().getColor(R.color.half_blue));
-                            snackbarModifySuccess.show();
+                            snackbarShowSuccess("修改成功");
                             initDataBookmarks();
                             bookmarkContent.invalidate();
                         } else {
-                            Snackbar snackbarModifyFail = Snackbar.make(frameLayout,"修改失败",Snackbar.LENGTH_SHORT);
-                            View snackbarView = snackbarModifyFail.getView();
-                            snackbarView.setBackgroundColor(getResources().getColor(R.color.half_blue));
-                            snackbarModifyFail.show();
+                            snackbarShowFail("修改失败");
 //                            Toast.makeText(HistoryActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                 }).setNegativeButton("取消", null).create().show();
             } else if (view.getId() == R.id.item_longclicked_deleteFavorites) {
-                new AlertDialog.Builder(HistoryActivity.this).setTitle("删除书签").setMessage("是否要删除\"" + item_name + "\"这个书签？").setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                new AlertDialog.Builder(HistoryActivity.this).setTitle("删除书签").setMessage(getMessage("书签")).setPositiveButton("删除", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (markAndHisManager.deleteBookMark(item_url)) {
                             //删除成功
-                            Snackbar snackbarDeleteSuccess = Snackbar.make(frameLayout,"删除成功",Snackbar.LENGTH_SHORT);
-                            View snackbarView = snackbarDeleteSuccess.getView();
-                            snackbarView.setBackgroundColor(getResources().getColor(R.color.half_blue));
-                            snackbarDeleteSuccess.show();
+                            snackbarShowSuccess("删除成功");
 //                            Toast.makeText(HistoryActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                             initDataBookmarks();
                             bookmarkContent.invalidate();
                         } else {
-                            Snackbar snackbarDeleteFail = Snackbar.make(frameLayout,"删除失败",Snackbar.LENGTH_SHORT);
-                            View snackbarView = snackbarDeleteFail.getView();
-                            snackbarView.setBackgroundColor(getResources().getColor(R.color.half_blue));
-                            snackbarDeleteFail.show();
+                            snackbarShowFail("删除失败");
 //                            Toast.makeText(HistoryActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).setNegativeButton("取消", null).create().show();
-//            } else if (view.getId() == R.id.item_longclicked_deleteHistory) {
-//                new AlertDialog.Builder(FavAndHisActivity.this).setTitle("删除历史").setMessage("是否要删除\"" + item_name + "\"这个历史？").setPositiveButton("删除", new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        if (favAndHisManager.deleteHistory(item_id)) {
-//                            //删除成功
-//                            Toast.makeText(FavAndHisActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
-//                            initDataHistory();
-//                            historyContent.invalidate();
-//                        } else {
-//                            Toast.makeText(FavAndHisActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                }).setNegativeButton("取消", null).create().show();
-//            } else if (view.getId() == R.id.item_longclicked_deleteAllHistories) {
-//                new AlertDialog.Builder(FavAndHisActivity.this).setTitle("清空历史").setMessage("是否要清空历史？").setPositiveButton("清空", new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        if (favAndHisManager.deleteAllHistory()) {
-//                            //删除成功
-//                            Toast.makeText(FavAndHisActivity.this, "成功清空", Toast.LENGTH_SHORT).show();
-//                            initDataHistory();
-//                            historyContent.invalidate();
-//                        } else {
-//                            Toast.makeText(FavAndHisActivity.this, "清空失败", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                }).setNegativeButton("取消", null).create().show();
+            } else if (view.getId() == R.id.item_longclicked_deleteHistory) {
+                new AlertDialog.Builder(HistoryActivity.this).setTitle("删除历史").setMessage(getMessage("历史记录")).setPositiveButton("删除", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        long date = Long.valueOf(item_date);
+                        if (markAndHisManager.deleteHistory(date)) {
+                            snackbarShowSuccess("删除成功");
+                            initDataHistory();
+                            historyContent.invalidate();
+                        } else {
+                            snackbarShowFail("删除失败");
+                        }
+                    }
+                }).setNegativeButton("取消", null).create().show();
+            } else if (view.getId() == R.id.item_longclicked_deleteAllHistories) {
+                new AlertDialog.Builder(HistoryActivity.this).setTitle("清空历史").setMessage("是否要清空历史？").setPositiveButton("清空", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (markAndHisManager.deleteAllHistory()) {
+                            //删除成功
+                            snackbarShowSuccess("成功清空");
+                            initDataHistory();
+                            historyContent.invalidate();
+                        } else {
+                            snackbarShowFail("清空失败");
+                        }
+                    }
+                }).setNegativeButton("取消", null).create().show();
             }
 
+        }
+
+        private void snackbarShowFail(String text) {
+            Snackbar snackbarDeleteFail = Snackbar.make(frameLayout, text, Snackbar.LENGTH_SHORT);
+            View snackbarView = snackbarDeleteFail.getView();
+            snackbarView.setBackgroundColor(getResources().getColor(R.color.half_blue));
+            snackbarDeleteFail.show();
+        }
+
+        private void snackbarShowSuccess(String text) {
+            //删除成功
+            Snackbar snackbarDeleteSuccess = Snackbar.make(frameLayout, text, Snackbar.LENGTH_SHORT);
+            View snackbarView = snackbarDeleteSuccess.getView();
+            snackbarView.setBackgroundColor(getResources().getColor(R.color.half_blue));
+            snackbarDeleteSuccess.show();
+        }
+
+        private String getMessage(String lable){
+            String message = "";
+            if (TextUtils.isEmpty(item_name)){
+                message= "是否要删除这个"+lable+"？";
+            }else{
+                message = "是否要删除\"" + item_name + "\"这条"+lable+"？";
+            }
+            return message;
         }
 
     }
