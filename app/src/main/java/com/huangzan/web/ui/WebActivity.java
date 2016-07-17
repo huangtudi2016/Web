@@ -39,6 +39,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
     private FloatingActionButton refreshWeb = null;
     private FloatingActionButton closeWeb = null;
     private FloatingActionButton bookmarkWeb = null;
+    private FloatingActionButton forwardWeb = null;
 
 
     @Override
@@ -78,11 +79,14 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
             refreshWeb = (FloatingActionButton) findViewById(R.id.action_refresh_web);
             closeWeb = (FloatingActionButton) findViewById(R.id.action_close_web);
             bookmarkWeb = (FloatingActionButton) findViewById(R.id.action_bookmark_web);
+            forwardWeb = (FloatingActionButton) findViewById(R.id.action_forward_web);
             refreshWeb.setOnClickListener(this);
             closeWeb.setOnClickListener(this);
             bookmarkWeb.setOnClickListener(this);
+            forwardWeb.setOnClickListener(this);
             refreshWeb.setIcon(R.drawable.ic_refresh_black);
             closeWeb.setIcon(R.drawable.ic_close_black);
+            forwardWeb.setIcon(R.drawable.ic_navigate_next);
 
             isBookMark = favAndHisManager.isBookMarkExist(webview.getUrl());
             Log.d(TAG + "1111111111", "isBookMark:" + isBookMark);
@@ -172,7 +176,11 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
                     bookmarkWeb.setIcon(R.drawable.ic_star_border_black);
                     favAndHisManager.deleteBookMark(webview.getUrl());
                 }
-
+            case R.id.action_forward_web:
+                if (webview.canGoForward()){
+                    webview.goForward();
+                }
+                break;
             default:
                 break;
         }
