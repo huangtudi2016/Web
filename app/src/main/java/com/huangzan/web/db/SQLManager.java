@@ -19,7 +19,8 @@ public class SQLManager {
 
     private DBHelper helper;
     private SQLiteDatabase db;
-
+    List<BookMark> bookMarks = new ArrayList<BookMark>();
+    List<HistoryWeb> historyWebs = new ArrayList<HistoryWeb>();
 
     public SQLManager(Context context) {
         helper = new DBHelper(context);
@@ -87,7 +88,7 @@ public class SQLManager {
     }
 
     public List<BookMark> getAllBookMark() {
-        List<BookMark> bookMarks = new ArrayList<BookMark>();
+
         Cursor cursor = queryTheCursor("bookmark");
         while (cursor.moveToNext()) {
             BookMark bookMark = new BookMark();
@@ -107,7 +108,7 @@ public class SQLManager {
      * @return Cursor
      */
     public Cursor queryTheCursor(String tableName) {
-        Cursor c = db.rawQuery("SELECT * FROM "+tableName , null);
+        Cursor c = db.rawQuery("SELECT * FROM "+tableName, null);
         return c;
     }
 
@@ -151,7 +152,7 @@ public class SQLManager {
     }
 
     public List<HistoryWeb> getAllHistory() {
-        List<HistoryWeb> historyWebs = new ArrayList<HistoryWeb>();
+
         Cursor cursor = queryTheCursor("history");
         while (cursor.moveToNext()) {
             HistoryWeb historyWeb = new HistoryWeb();

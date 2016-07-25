@@ -1,60 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/bookmarkAndHisotry"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@android:color/white"
+                android:id="@+id/bookmarkAndHisotry"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@android:color/white"
     >
 
     <LinearLayout
         android:id="@+id/ll_bookmark_history"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_bookmark"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:gravity="center"
             android:background="@drawable/bookmark_history_selector"
+            android:gravity="center"
             android:text="@string/bookmark"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <Button
             android:id="@+id/btn_history"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:gravity="center"
             android:background="@drawable/bookmark_history_selector"
+            android:gravity="center"
             android:text="@string/hisotry"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/fragment_bhactivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ll_bookmark_history" >
+        android:layout_below="@id/ll_bookmark_history">
 
-        <ListView
-            android:id="@+id/bookmark_bh_bhactivity"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_bh_bhactivity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="#E2E2E2" 
-            android:dividerHeight="1dp"
-            android:visibility="gone">
-        </ListView>
+            android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/history_bh_bhactivity"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="#E2E2E2"
-            android:dividerHeight="1dp" >
-        </ListView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/bookmark_bh_bhactivity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/history_bh_bhactivity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+        </android.support.v4.widget.SwipeRefreshLayout>
     </FrameLayout>
 
 </RelativeLayout>

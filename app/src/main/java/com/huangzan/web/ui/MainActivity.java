@@ -1,9 +1,12 @@
 package com.huangzan.web.ui;
 
 import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +18,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,11 +27,14 @@ import android.widget.Toast;
 
 import com.huangzan.web.R;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private Button webButton;
     private Button wetherButton;
-
+    private String path = Environment.getExternalStorageDirectory() + File.separator +
+            "webbrowser" +File.separator + "download";
     private static boolean isExit = false;
     private static Handler handler = new Handler() {
         @Override
@@ -153,12 +160,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.nav_history:
-                Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
-                startActivity(intent);
+                Intent historyIntent = new Intent(MainActivity.this, HistoryActivity.class);
+                startActivity(historyIntent);
                 break;
             case R.id.nav_download:
+                Log.i("1222222222","path = "+path);
+                File file = new File(path);
+                if (null == file || !file.exists()) {
+                    return false;
+                }
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_DEFAULT);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setDataAndType(Uri.fromFile(file), "file/*");
+                try {
+                    startActivity(intent);
+//                    startActivity(Intent.createChooser(intent, "选择浏览工具"));
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.nav_send:
                 break;

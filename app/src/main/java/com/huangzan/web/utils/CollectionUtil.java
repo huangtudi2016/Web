@@ -12,7 +12,7 @@ public class CollectionUtil {
 //        System.out.print("111111111"+list.toString());
         Iterator iterator = list.iterator();
         while (iterator.hasNext()){
-            if (null==iterator.next()||"".equals(iterator.next().toString().trim())){
+            if (null==iterator.next()/*||"".equals(iterator.next().toString().trim())*/){
                iterator.remove();
            }
         }

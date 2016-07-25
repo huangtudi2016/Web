@@ -22,5 +22,13 @@
     <string name="deletebookmarks">删除书签</string>
     <string name="deletehistory">删除历史</string>
     <string name="deleteAllHistory">清空历史</string>
+    <string name="phone">电话</string>
+    <string name="email">邮件</string>
+    <string name="map">地图</string>
+    <string name="picture">图片</string>
+    <string name="viewImage">查看图片</string>
+    <string name="saveImage">保存图片</string>
+    <string name="viewImageAttributes">查看属性</string>
+    <string name="open">打开</string>
 
 </resources>
