@@ -106,7 +106,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 handler.sendEmptyMessageDelayed(0, 2000);
             } else {
                 finish();
-                System.exit(0);
+                //System.exit(0);
+                android.os.Process.killProcess(android.os.Process.myPid());
             }
         }
     }
